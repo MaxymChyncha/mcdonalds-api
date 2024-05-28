@@ -70,7 +70,7 @@ async def read_single_product_field(
         HTTPException: If the product or the field is not found.
     """
     if product := await get_single_product(db=db, product_name=product_name):
-        if not hasattr(product, product_field):
-            raise HTTPException(status_code=404, detail="Field not found")
-        return {product_field: getattr(product, product_field)}
+        if hasattr(product, product_field):
+            return {product_field: getattr(product, product_field)}
+        raise HTTPException(status_code=404, detail="Field not found")
     raise HTTPException(status_code=404, detail="Product not found")
